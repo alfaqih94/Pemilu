@@ -59,26 +59,29 @@
       <!-- Login Page -->
       <div id="loginPage" class="container-center">
         <div
-          class="bg-white p-8 rounded-xl shadow-xl w-full max-w-md text-center"
+          class="bg-blue-100 p-8 rounded-xl shadow-2xl w-full max-w-md text-center"
         >
           <img
-            src="img/osis.png"
+            src="img/sekolah.png"
             alt="Logo OSIS"
             class="mx-auto mb-6 rounded-lg w-40 h-40"
           />
-          <h1 class="text-2xl md:text-3xl font-bold text-gray-800 mb-2">
+          <h1 class="text-xl md:text-2xl font-bold text-black">
             Pemilihan Ketua OSIS
           </h1>
-          <p class="text-gray-500 mb-6">UPTD SMPN 2 AROSBAYA</p>
+          <h1 class="text-xl md:text-2xl font-bold text-black">
+            UPTD SMP NEGERI 2 AROSBAYA
+          </h1>
+          <p class="text-xl text-black font-bold mb-4">PERIODE 2025 - 2026</p>
           <input
             id="tokenInput"
             type="text"
             placeholder="Masukkan Token Anda"
-            class="w-full p-3 mb-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300 text-center uppercase text-gray-700"
+            class="w-full p-3 mb-4 border-4 border-blue-400 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300 text-center uppercase text-black font-bold text-xl"
           />
           <button
             onclick="handleLogin()"
-            class="w-full py-3 px-6 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-300 shadow-md"
+            class="w-full py-3 px-6 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 transition duration-300 shadow-md"
           >
             Masuk
           </button>
@@ -100,24 +103,26 @@
               class="rounded-lg h-16 w-16"
             />
             <h1 class="text-2xl md:text-3xl font-bold text-white">
-              Rekapitulasi Suara Pemilihan Ketua OSIS Periode 2025-2026
+              Rekapitulasi Suara
             </h1>
           </div>
           <div class="flex items-center space-x-2">
             <button
               onclick="updateAdminData(true)"
-              class="py-2 px-4 bg-gray-200 text-gray-700 font-medium rounded-lg hover:bg-gray-300 transition duration-300"
+              class="py-2 px-4 bg-gray-200 text-gray-800 font-medium rounded-lg hover:bg-gray-300 transition duration-300"
             >
               <span class="flex items-center justify-center space-x-2">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  class="h-5 w-5"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
+                  x="0px"
+                  y="0px"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 26 26"
                 >
                   <path
-                    d="M22 12A10 10 0 1 1 12 2a10 10 0 0 1 10 10zm-2 0a8 8 0 1 0-8 8 8 8 0 0 0 8-8zM12 4V0l4 4-4 4V4z"
-                  />
+                    d="M 13.8125 0 C 7.878906 0 4.082031 4.292969 4 10 L 0.5 10 C 0.300781 10 0.09375 10.113281 0.09375 10.3125 C -0.0078125 10.511719 -0.0078125 10.710938 0.09375 10.8125 L 6.09375 18.5 C 6.195313 18.601563 6.300781 18.6875 6.5 18.6875 C 6.699219 18.6875 6.804688 18.601563 6.90625 18.5 L 12.90625 10.8125 C 13.007813 10.710938 13.007813 10.511719 12.90625 10.3125 C 12.804688 10.113281 12.601563 10 12.5 10 L 9 10 C 9.066406 2.464844 12.921875 0.789063 13.8125 0.09375 C 14.011719 -0.0078125 14.011719 0 13.8125 0 Z M 19.5 7.34375 C 19.351563 7.34375 19.195313 7.398438 19.09375 7.5 L 13.09375 15.1875 C 12.992188 15.386719 13 15.585938 13 15.6875 C 13.101563 15.886719 13.304688 16 13.40625 16 L 17 16 C 16.933594 23.535156 13.078125 25.210938 12.1875 25.90625 C 11.988281 26.007813 11.988281 26 12.1875 26 C 18.121094 26 21.917969 21.707031 22 16 L 25.40625 16 C 25.605469 16 25.8125 15.886719 25.8125 15.6875 C 26.011719 15.488281 26.007813 15.289063 25.90625 15.1875 L 19.90625 7.5 C 19.804688 7.398438 19.648438 7.34375 19.5 7.34375 Z"
+                  ></path>
                 </svg>
                 <span>Refresh</span>
               </span>
@@ -162,7 +167,7 @@
             />
           </div>
           <p class="text-lg text-white mt-2">
-            Silahkan pilih salah satu kandidat terbaik Anda.
+            Silahkan pilih salah satu calon Ketua OSIS terbaik Anda.
           </p>
         </div>
         <div
@@ -213,18 +218,16 @@
         class="modal fixed inset-0 hidden container-center"
       >
         <div class="bg-white p-8 rounded-xl shadow-xl max-w-md text-center">
-          <h2 class="text-xl font-bold text-gray-800 mb-4">
-            Verifikasi Pengguna
-          </h2>
-          <div id="login-confirm-content" class="text-gray-600 mb-6 text-left">
-            <p><strong>Nama:</strong> <span id="confirmName"></span></p>
-            <p><strong>Kelas:</strong> <span id="confirmClass"></span></p>
+          <h2 class="text-2xl font-bold text-gray-800 mb-4">Verifikasi Akun</h2>
+          <div id="login-confirm-content" class="text-center text-black mb-6">
+            <p class="text-xl style-bold"><span id="confirmName"></span></p>
+            <p><span id="confirmClass"></span></p>
+            <br />
             <p>
-              <strong>Status Voting:</strong>
               <span id="confirmStatus" class="font-semibold"></span>
             </p>
-            <p class="text-xs text-gray-400 mt-2">
-              ID Pengguna: <span id="userIdDisplay"></span>
+            <p class="text-xs text-white mt-2">
+              <span id="userIdDisplay"></span>
             </p>
           </div>
           <div class="flex justify-center space-x-4">
@@ -499,7 +502,7 @@
         if (!selectedCandidate || !loggedInUser) return;
 
         hideConfirmationModal();
-        showLoadingModal("Pilihan terkirim!");
+        showLoadingModal("Sedang Mengirim Data Pilihanmu");
 
         try {
           const formData = new FormData();
@@ -514,12 +517,6 @@
           const result = await response.json();
 
           if (result.status === "success") {
-            showModal(
-              "Berhasil!",
-              "Terima kasih, suara Anda berhasil terkirim.",
-              "Selesai"
-            );
-
             // Update user's vote status
             loggedInUser.isVoted = true;
 
@@ -527,7 +524,7 @@
             document.getElementById("tokenInput").value = "";
             setTimeout(() => {
               showPage("loginPage");
-            }, 2000);
+            }, 1000);
           } else {
             showModal(
               "Gagal!",
