@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pemilihan Ketua OSIS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+      body {
+        font-family: "Inter", sans-serif;
+        background: linear-gradient(135deg, #a8c0ff, #3f2b96);
+      }
+      .container-center {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+      }
+      .modal {
+        background-color: rgba(0, 0, 0, 0.6);
+        backdrop-filter: blur(5px);
+        -webkit-backdrop-filter: blur(5px);
+        z-index: 50;
+      }
+      .spinner {
+        border: 4px solid rgba(255, 255, 255, 0.3);
+        border-top: 4px solid #fff;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        animation: spin 1s linear infinite;
+      }
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
+  </head>
+  <body class="bg-gray-100">
+    <!-- Loading Modal -->
+    <div id="loadingModal" class="modal fixed inset-0 hidden container-center">
+      <div
+        class="bg-blue-600/90 rounded-xl p-8 flex flex-col items-center shadow-lg"
+      >
+        <div class="spinner mb-4"></div>
+        <p id="loadingMessage" class="text-white font-medium text-lg">
+          Sedang memuat data...
+        </p>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div id="app" class="container mx-auto p-4 md:p-8">
+      <!-- Login Page -->
+      <div id="loginPage" class="container-center">
+        <div
+          class="bg-white p-8 rounded-xl shadow-xl w-full max-w-md text-center"
+        >
+          <img
+            src="img/osis.png"
+            alt="Logo OSIS"
+            class="mx-auto mb-6 rounded-lg w-40 h-40"
+          />
+          <h1 class="text-2xl md:text-3xl font-bold text-gray-800 mb-2">
+            Pemilihan Ketua OSIS
+          </h1>
+          <p class="text-gray-500 mb-6">UPTD SMPN 2 AROSBAYA</p>
+          <input
+            id="tokenInput"
+            type="text"
+            placeholder="Masukkan Token Anda"
+            class="w-full p-3 mb-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300 text-center uppercase text-gray-700"
+          />
+          <button
+            onclick="handleLogin()"
+            class="w-full py-3 px-6 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-300 shadow-md"
+          >
+            Masuk
+          </button>
+          <p id="errorMessage" class="text-red-500 mt-4 font-medium hidden">
+            Token tidak valid.
+          </p>
+        </div>
+      </div>
+
+      <!-- Admin Dashboard -->
+      <div id="adminDashboard" class="hidden">
+        <div
+          class="flex flex-col items-center md:flex-row justify-between mb-6"
+        >
+          <div class="flex items-center space-x-4 mb-4 md:mb-0">
+            <img
+              src="img/osis.png"
+              alt="Logo OSIS"
+              class="rounded-lg h-16 w-16"
+            />
+            <h1 class="text-2xl md:text-3xl font-bold text-white">
+              Rekapitulasi Suara Pemilihan Ketua OSIS Periode 2025-2026
+            </h1>
+          </div>
+          <div class="flex items-center space-x-2">
+            <button
+              onclick="updateAdminData(true)"
+              class="py-2 px-4 bg-gray-200 text-gray-700 font-medium rounded-lg hover:bg-gray-300 transition duration-300"
+            >
+              <span class="flex items-center justify-center space-x-2">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-5 w-5"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                >
+                  <path
+                    d="M22 12A10 10 0 1 1 12 2a10 10 0 0 1 10 10zm-2 0a8 8 0 1 0-8 8 8 8 0 0 0 8-8zM12 4V0l4 4-4 4V4z"
+                  />
+                </svg>
+                <span>Refresh</span>
+              </span>
+            </button>
+            <button
+              onclick="window.location.reload()"
+              class="py-2 px-4 bg-red-500 text-white font-medium rounded-lg hover:bg-red-600 transition duration-300"
+            >
+              Keluar
+            </button>
+          </div>
+        </div>
+        <div
+          id="adminCandidates"
+          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
+        >
+          <!-- Candidate Cards will be inserted here by JS -->
+        </div>
+        <div
+          class="bg-blue-800 text-white mt-6 p-4 rounded-xl shadow-xl overflow-hidden text-center"
+        >
+          <p id="sloganDisplay" class="text-lg font-bold">...</p>
+        </div>
+      </div>
+
+      <!-- User Dashboard -->
+      <div id="userDashboard" class="hidden">
+        <div class="flex flex-col items-center justify-center mb-6">
+          <div class="flex items-center space-x-4 mb-4 md:mb-0">
+            <img
+              src="img/sekolah.png"
+              alt="Logo Sekolah"
+              class="rounded-lg h-16 w-16"
+            />
+            <h1 class="text-2xl md:text-3xl font-bold text-white">
+              Pilih Ketua OSIS
+            </h1>
+            <img
+              src="img/osis.png"
+              alt="Logo OSIS"
+              class="rounded-lg h-16 w-16"
+            />
+          </div>
+          <p class="text-lg text-white mt-2">
+            Silahkan pilih salah satu kandidat terbaik Anda.
+          </p>
+        </div>
+        <div
+          id="userCandidates"
+          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
+        >
+          <!-- Candidate Cards will be inserted here by JS -->
+        </div>
+      </div>
+
+      <!-- Confirmation Modal -->
+      <div
+        id="confirmationModal"
+        class="modal fixed inset-0 hidden container-center"
+      >
+        <div class="bg-white p-8 rounded-xl shadow-xl max-w-md text-center">
+          <h2 class="text-xl font-bold text-gray-800 mb-4">
+            Konfirmasi Pilihan
+          </h2>
+          <p class="text-gray-600 mb-6">
+            Anda yakin ingin memilih kandidat
+            <span
+              id="candidateNameConfirm"
+              class="font-semibold text-blue-600"
+            ></span
+            >?
+          </p>
+          <div class="flex justify-center space-x-4">
+            <button
+              id="cancelVote"
+              class="py-2 px-6 bg-gray-200 text-gray-700 font-medium rounded-lg hover:bg-gray-300 transition duration-300"
+            >
+              Batal
+            </button>
+            <button
+              id="confirmVote"
+              class="py-2 px-6 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-800 transition duration-300"
+            >
+              Ya, Pilih
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Login Confirmation Modal -->
+      <div
+        id="loginConfirmationModal"
+        class="modal fixed inset-0 hidden container-center"
+      >
+        <div class="bg-white p-8 rounded-xl shadow-xl max-w-md text-center">
+          <h2 class="text-xl font-bold text-gray-800 mb-4">
+            Verifikasi Pengguna
+          </h2>
+          <div id="login-confirm-content" class="text-gray-600 mb-6 text-left">
+            <p><strong>Nama:</strong> <span id="confirmName"></span></p>
+            <p><strong>Kelas:</strong> <span id="confirmClass"></span></p>
+            <p>
+              <strong>Status Voting:</strong>
+              <span id="confirmStatus" class="font-semibold"></span>
+            </p>
+            <p class="text-xs text-gray-400 mt-2">
+              ID Pengguna: <span id="userIdDisplay"></span>
+            </p>
+          </div>
+          <div class="flex justify-center space-x-4">
+            <button
+              id="loginConfirmButton"
+              onclick="hideLoginConfirmationModal()"
+              class="py-2 px-6 font-medium rounded-lg transition duration-300"
+            ></button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Ganti dengan URL Web App Google Apps Script Anda
+      const SCRIPT_URL =
+        "https://script.google.com/macros/s/AKfycbzTf_JAYRhNt5cRSeQOlh0d4G0o_DGxAyiO-ZI56mKZD7NNCQVeK_RczjyaNP_2Yu4IHw/exec";
+
+      let selectedCandidate = null;
+      let lastLoginType = null;
+      let loggedInUser = null;
+      let sloganIntervalId = null;
+      let slogans = [];
+      let candidates = [];
+      let voteResults = {};
+
+      // --- UI Functions ---
+      function showPage(pageId) {
+        const pages = ["loginPage", "adminDashboard", "userDashboard"];
+        pages.forEach((id) => {
+          document.getElementById(id).classList.add("hidden");
+        });
+        document.getElementById(pageId).classList.remove("hidden");
+
+        if (pageId === "adminDashboard") {
+          startSloganRotation();
+        } else {
+          stopSloganRotation();
+        }
+      }
+
+      function showLoadingModal(message) {
+        const modal = document.getElementById("loadingModal");
+        document.getElementById("loadingMessage").textContent = message;
+        modal.classList.remove("hidden");
+      }
+
+      function hideLoadingModal() {
+        document.getElementById("loadingModal").classList.add("hidden");
+      }
+
+      function showLoginConfirmationModal(userDoc) {
+        document.getElementById("confirmName").textContent = userDoc.name;
+        document.getElementById("confirmClass").textContent = userDoc.class;
+        const statusText = userDoc.isVoted ? "Sudah Memilih" : "Belum Memilih";
+        document.getElementById("confirmStatus").textContent = statusText;
+        document.getElementById("userIdDisplay").textContent = userDoc.id;
+
+        const button = document.getElementById("loginConfirmButton");
+        if (userDoc.isVoted) {
+          button.textContent = "Tutup";
+          button.classList.remove("bg-green-600", "hover:bg-green-700");
+          button.classList.add("bg-red-500", "hover:bg-red-600", "text-white");
+          document.getElementById("confirmStatus").className =
+            "text-red-500 font-semibold";
+        } else {
+          button.textContent = "Lanjutkan";
+          button.classList.remove("bg-red-500", "hover:bg-red-600");
+          button.classList.add(
+            "bg-green-600",
+            "hover:bg-green-700",
+            "text-white"
+          );
+          document.getElementById("confirmStatus").className =
+            "text-green-500 font-semibold";
+        }
+
+        document
+          .getElementById("loginConfirmationModal")
+          .classList.remove("hidden");
+      }
+
+      function hideLoginConfirmationModal() {
+        document
+          .getElementById("loginConfirmationModal")
+          .classList.add("hidden");
+        if (!loggedInUser.isVoted) {
+          renderUserDashboard();
+        } else {
+          showPage("loginPage");
+        }
+      }
+
+      // --- Core Logic ---
+      async function handleLogin() {
+        const tokenInput = document
+          .getElementById("tokenInput")
+          .value.trim()
+          .toUpperCase();
+        const errorMessage = document.getElementById("errorMessage");
+        errorMessage.classList.add("hidden");
+
+        if (!tokenInput) {
+          errorMessage.textContent = "Token tidak boleh kosong.";
+          errorMessage.classList.remove("hidden");
+          return;
+        }
+
+        showLoadingModal("Memverifikasi token...");
+
+        try {
+          const url = `${SCRIPT_URL}?action=getUser&token=${tokenInput}`;
+          const response = await fetch(url);
+          const result = await response.json();
+
+          if (result.status === "success" && result.data) {
+            loggedInUser = result.data;
+
+            if (loggedInUser.isAdmin) {
+              lastLoginType = "admin";
+              updateAdminData();
+            } else {
+              lastLoginType = "user";
+              showLoginConfirmationModal(loggedInUser);
+            }
+          } else {
+            errorMessage.textContent = "Token tidak valid.";
+            errorMessage.classList.remove("hidden");
+          }
+        } catch (error) {
+          console.error("Login failed:", error);
+          errorMessage.textContent = "Terjadi kesalahan. Silakan coba lagi.";
+          errorMessage.classList.remove("hidden");
+        } finally {
+          hideLoadingModal();
+        }
+      }
+
+      async function fetchInitialData() {
+        showLoadingModal("Memuat data...");
+        try {
+          const candidatesUrl = `${SCRIPT_URL}?action=getCandidates`;
+          const slogansUrl = `${SCRIPT_URL}?action=getSlogans`;
+
+          const [candidatesResponse, slogansResponse] = await Promise.all([
+            fetch(candidatesUrl),
+            fetch(slogansUrl),
+          ]);
+
+          candidates = (await candidatesResponse.json()).data || [];
+          slogans = (await slogansResponse.json()).data || [];
+        } catch (error) {
+          console.error("Error fetching data:", error);
+          showModal(
+            "Gagal!",
+            "Terjadi kesalahan saat memuat data. Periksa koneksi internet Anda.",
+            "Tutup"
+          );
+        } finally {
+          hideLoadingModal();
+        }
+      }
+
+      async function renderUserDashboard() {
+        const container = document.getElementById("userCandidates");
+        container.innerHTML = "";
+        showPage("userDashboard");
+
+        candidates.forEach((candidate) => {
+          const card = document.createElement("div");
+          card.className =
+            "bg-white rounded-xl shadow-xl overflow-hidden flex flex-col items-center p-6 text-center transition duration-300 cursor-pointer";
+          card.innerHTML = `
+                    <div class="w-48 h-72 overflow-hidden rounded-lg mb-4 shadow-md">
+                        <img src="${candidate.foto}" alt="Foto ${candidate.nama}" class="w-full h-full object-cover">
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800">${candidate.nama}</h3>
+                    <p class="text-sm font-medium text-gray-500 mb-4">${candidate.class}</p>
+                    <p class="text-sm text-gray-600 mb-6 italic">"${candidate.visi}"</p>
+                    <button onclick="showConfirmationModal('${candidate.id}')" class="w-full py-2 px-4 bg-blue-600 text-white font-semibold rounded-lg hover:bg-green-800 transition duration-300 shadow-md">
+                        Pilih Kandidat Ini
+                    </button>
+                `;
+          container.appendChild(card);
+        });
+      }
+
+      async function updateAdminData() {
+        showLoadingModal("Memperbarui data...");
+        try {
+          const votesUrl = `${SCRIPT_URL}?action=getVotes`;
+          const votesResponse = await fetch(votesUrl);
+          const votesData = (await votesResponse.json()).data || [];
+
+          voteResults = votesData.reduce((acc, vote) => {
+            acc[vote.candidateId] = (acc[vote.candidateId] || 0) + 1;
+            return acc;
+          }, {});
+
+          const totalVotes = Object.values(voteResults).reduce(
+            (sum, c) => sum + c,
+            0
+          );
+          const container = document.getElementById("adminCandidates");
+          container.innerHTML = "";
+          showPage("adminDashboard");
+
+          candidates.forEach((candidate) => {
+            const votes = voteResults[candidate.id] || 0;
+            const percentage =
+              totalVotes > 0 ? ((votes / totalVotes) * 100).toFixed(2) : 0;
+
+            const card = document.createElement("div");
+            card.className =
+              "bg-white rounded-xl shadow-xl overflow-hidden flex flex-col items-center p-6 text-center transition duration-300";
+            card.innerHTML = `
+                        <div class="w-48 h-72 overflow-hidden rounded-lg mb-4 shadow-md">
+                            <img src="${candidate.foto}" alt="Foto ${candidate.nama}" class="w-full h-full object-cover">
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-800">${candidate.nama}</h3>
+                        <div class="mt-4">
+                            <p class="text-2xl font-bold text-blue-600">${percentage}%</p>
+                            <p class="text-gray-500 text-sm">(${votes} Suara)</p>
+                        </div>
+                    `;
+            container.appendChild(card);
+          });
+        } catch (error) {
+          console.error("Error updating admin data:", error);
+          showModal(
+            "Gagal!",
+            "Terjadi kesalahan saat memuat data rekapitulasi.",
+            "Tutup"
+          );
+        } finally {
+          hideLoadingModal();
+        }
+      }
+
+      function startSloganRotation() {
+        if (sloganIntervalId) clearInterval(sloganIntervalId);
+        const sloganElement = document.getElementById("sloganDisplay");
+        if (slogans.length === 0) {
+          sloganElement.textContent = "Sedang memuat slogan...";
+          return;
+        }
+        sloganElement.textContent = slogans[0];
+        let currentSloganIndex = 1;
+        sloganIntervalId = setInterval(() => {
+          sloganElement.textContent = slogans[currentSloganIndex];
+          currentSloganIndex = (currentSloganIndex + 1) % slogans.length;
+        }, 10000);
+      }
+
+      function stopSloganRotation() {
+        if (sloganIntervalId) {
+          clearInterval(sloganIntervalId);
+          sloganIntervalId = null;
+        }
+      }
+
+      function showConfirmationModal(candidateId) {
+        selectedCandidate = candidates.find((c) => c.id === candidateId);
+        if (!selectedCandidate) return;
+
+        document.getElementById("candidateNameConfirm").textContent =
+          selectedCandidate.nama;
+        document.getElementById("confirmationModal").classList.remove("hidden");
+      }
+
+      async function handleVote() {
+        if (!selectedCandidate || !loggedInUser) return;
+
+        hideConfirmationModal();
+        showLoadingModal("Pilihan terkirim!");
+
+        try {
+          const formData = new FormData();
+          formData.append("action", "submitVote");
+          formData.append("userId", loggedInUser.id);
+          formData.append("candidateId", selectedCandidate.id);
+
+          const response = await fetch(SCRIPT_URL, {
+            method: "POST",
+            body: formData,
+          });
+          const result = await response.json();
+
+          if (result.status === "success") {
+            showModal(
+              "Berhasil!",
+              "Terima kasih, suara Anda berhasil terkirim.",
+              "Selesai"
+            );
+
+            // Update user's vote status
+            loggedInUser.isVoted = true;
+
+            // Back to login page after a short delay
+            document.getElementById("tokenInput").value = "";
+            setTimeout(() => {
+              showPage("loginPage");
+            }, 2000);
+          } else {
+            showModal(
+              "Gagal!",
+              result.message || "Terjadi kesalahan saat mengirim suara.",
+              "Tutup"
+            );
+          }
+        } catch (error) {
+          console.error("Voting failed:", error);
+          showModal(
+            "Gagal!",
+            "Terjadi kesalahan saat mengirim suara. Silakan coba lagi.",
+            "Tutup"
+          );
+        } finally {
+          hideLoadingModal();
+        }
+      }
+
+      function hideConfirmationModal() {
+        document.getElementById("confirmationModal").classList.add("hidden");
+      }
+
+      function showModal(title, message, buttonText) {
+        const modal = document.createElement("div");
+        modal.className = "fixed inset-0 modal container-center";
+        modal.innerHTML = `
+                <div class="bg-white p-8 rounded-xl shadow-xl max-w-sm text-center">
+                    <h2 class="text-xl font-bold text-gray-800 mb-4">${title}</h2>
+                    <p class="text-gray-600 mb-6">${message}</p>
+                    <button onclick="this.parentElement.parentElement.remove()" class="py-2 px-6 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition duration-300">
+                        ${buttonText}
+                    </button>
+                </div>
+            `;
+        document.body.appendChild(modal);
+      }
+
+      document
+        .getElementById("cancelVote")
+        .addEventListener("click", hideConfirmationModal);
+      document
+        .getElementById("confirmVote")
+        .addEventListener("click", handleVote);
+
+      document.addEventListener("DOMContentLoaded", () => {
+        fetchInitialData();
+        showPage("loginPage");
+      });
+    </script>
+  </body>
+</html>
