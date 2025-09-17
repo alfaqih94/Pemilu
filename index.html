@@ -49,7 +49,7 @@
       >
         <div class="spinner mb-4"></div>
         <p id="loadingMessage" class="text-white font-medium text-lg">
-          Sedang memuat data...
+          Sedang Memuat Data...
         </p>
       </div>
     </div>
@@ -66,10 +66,10 @@
             alt="Logo OSIS"
             class="mx-auto mb-6 rounded-lg w-40 h-40"
           />
-          <h1 class="text-xl md:text-2xl font-bold text-black">
+          <h1 class="text-2xl md:text-2xl font-bold text-black">
             Pemilihan Ketua OSIS
           </h1>
-          <h1 class="text-xl md:text-2xl font-bold text-black">
+          <h1 class="text-xl md:text-xl font-bold text-black">
             UPTD SMP NEGERI 2 AROSBAYA
           </h1>
           <p class="text-xl text-black font-bold mb-4">PERIODE 2025 - 2026</p>
@@ -86,7 +86,7 @@
             Masuk
           </button>
           <p id="errorMessage" class="text-red-500 mt-4 font-medium hidden">
-            Token tidak valid.
+            Token Tidak Valid. Hubungi Petugas!
           </p>
         </div>
       </div>
@@ -103,35 +103,21 @@
               class="rounded-lg h-16 w-16"
             />
             <h1 class="text-2xl md:text-3xl font-bold text-white">
-              Rekapitulasi Suara
+              Rekapitulasi Suara Pemilihan Ketua OSIS
             </h1>
           </div>
           <div class="flex items-center space-x-2">
             <button
               onclick="updateAdminData(true)"
-              class="py-2 px-4 bg-gray-200 text-gray-800 font-medium rounded-lg hover:bg-gray-300 transition duration-300"
+              class="py-2 px-4 bg-white text-blue-800 font-bold rounded-lg hover:bg-green-400 transition duration-300"
             >
-              <span class="flex items-center justify-center space-x-2">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  x="0px"
-                  y="0px"
-                  width="20"
-                  height="20"
-                  viewBox="0 0 26 26"
-                >
-                  <path
-                    d="M 13.8125 0 C 7.878906 0 4.082031 4.292969 4 10 L 0.5 10 C 0.300781 10 0.09375 10.113281 0.09375 10.3125 C -0.0078125 10.511719 -0.0078125 10.710938 0.09375 10.8125 L 6.09375 18.5 C 6.195313 18.601563 6.300781 18.6875 6.5 18.6875 C 6.699219 18.6875 6.804688 18.601563 6.90625 18.5 L 12.90625 10.8125 C 13.007813 10.710938 13.007813 10.511719 12.90625 10.3125 C 12.804688 10.113281 12.601563 10 12.5 10 L 9 10 C 9.066406 2.464844 12.921875 0.789063 13.8125 0.09375 C 14.011719 -0.0078125 14.011719 0 13.8125 0 Z M 19.5 7.34375 C 19.351563 7.34375 19.195313 7.398438 19.09375 7.5 L 13.09375 15.1875 C 12.992188 15.386719 13 15.585938 13 15.6875 C 13.101563 15.886719 13.304688 16 13.40625 16 L 17 16 C 16.933594 23.535156 13.078125 25.210938 12.1875 25.90625 C 11.988281 26.007813 11.988281 26 12.1875 26 C 18.121094 26 21.917969 21.707031 22 16 L 25.40625 16 C 25.605469 16 25.8125 15.886719 25.8125 15.6875 C 26.011719 15.488281 26.007813 15.289063 25.90625 15.1875 L 19.90625 7.5 C 19.804688 7.398438 19.648438 7.34375 19.5 7.34375 Z"
-                  ></path>
-                </svg>
-                <span>Refresh</span>
-              </span>
+              🔄 Refresh
             </button>
             <button
               onclick="window.location.reload()"
-              class="py-2 px-4 bg-red-500 text-white font-medium rounded-lg hover:bg-red-600 transition duration-300"
+              class="py-2 px-4 bg-white text-red-800 font-bold rounded-lg hover:bg-red-400 transition duration-300"
             >
-              Keluar
+              ❌ Keluar
             </button>
           </div>
         </div>
@@ -188,17 +174,18 @@
             Konfirmasi Pilihan
           </h2>
           <p class="text-gray-600 mb-6">
-            Anda yakin ingin memilih kandidat
+            Anda yakin ingin memilih
+            <br />
             <span
               id="candidateNameConfirm"
-              class="font-semibold text-blue-600"
+              class="text-lg font-bold text-blue-800"
             ></span
             >?
           </p>
           <div class="flex justify-center space-x-4">
             <button
               id="cancelVote"
-              class="py-2 px-6 bg-gray-200 text-gray-700 font-medium rounded-lg hover:bg-gray-300 transition duration-300"
+              class="py-2 px-6 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-800 transition duration-300"
             >
               Batal
             </button>
@@ -336,7 +323,7 @@
           return;
         }
 
-        showLoadingModal("Memverifikasi token...");
+        showLoadingModal("Verifikasi Token...");
 
         try {
           const url = `${SCRIPT_URL}?action=getUser&token=${tokenInput}`;
@@ -354,12 +341,12 @@
               showLoginConfirmationModal(loggedInUser);
             }
           } else {
-            errorMessage.textContent = "Token tidak valid.";
+            errorMessage.textContent = "Token Tidak Valid. Hubungi Petugas!";
             errorMessage.classList.remove("hidden");
           }
         } catch (error) {
           console.error("Login failed:", error);
-          errorMessage.textContent = "Terjadi kesalahan. Silakan coba lagi.";
+          errorMessage.textContent = "Terjadi Kesalahan. Silakan Coba Lagi.";
           errorMessage.classList.remove("hidden");
         } finally {
           hideLoadingModal();
@@ -405,10 +392,10 @@
                         <img src="${candidate.foto}" alt="Foto ${candidate.nama}" class="w-full h-full object-cover">
                     </div>
                     <h3 class="text-xl font-bold text-gray-800">${candidate.nama}</h3>
-                    <p class="text-sm font-medium text-gray-500 mb-4">${candidate.class}</p>
+                    <p class="text-lg font-semibold text-gray-700 mb-4">Kelas ${candidate.class}</p>
                     <p class="text-sm text-gray-600 mb-6 italic">"${candidate.visi}"</p>
                     <button onclick="showConfirmationModal('${candidate.id}')" class="w-full py-2 px-4 bg-blue-600 text-white font-semibold rounded-lg hover:bg-green-800 transition duration-300 shadow-md">
-                        Pilih Kandidat Ini
+                        Pilih Calon Ini
                     </button>
                 `;
           container.appendChild(card);
