@@ -49,7 +49,7 @@
       >
         <div class="spinner mb-4"></div>
         <p id="loadingMessage" class="text-white font-medium text-lg">
-          Sedang Memuat Data...
+          Sedang Memuat Data
         </p>
       </div>
     </div>
@@ -205,10 +205,14 @@
         class="modal fixed inset-0 hidden container-center"
       >
         <div class="bg-white p-8 rounded-xl shadow-xl max-w-md text-center">
-          <h2 class="text-2xl font-bold text-gray-800 mb-4">Verifikasi Akun</h2>
+          <h2 class="text-xl font-bold text-gray-800 mb-4">Verifikasi Akun</h2>
           <div id="login-confirm-content" class="text-center text-black mb-6">
-            <p class="text-xl style-bold"><span id="confirmName"></span></p>
-            <p><span id="confirmClass"></span></p>
+            <p class="text-black text-xl style-bold">
+              <span id="confirmName"></span>
+            </p>
+            <p class="text-gray-800 text-lg style-semibold">
+              <span id="confirmClass"></span>
+            </p>
             <br />
             <p>
               <span id="confirmStatus" class="font-semibold"></span>
@@ -323,7 +327,7 @@
           return;
         }
 
-        showLoadingModal("Verifikasi Token...");
+        showLoadingModal("Verifikasi Token");
 
         try {
           const url = `${SCRIPT_URL}?action=getUser&token=${tokenInput}`;
@@ -354,7 +358,7 @@
       }
 
       async function fetchInitialData() {
-        showLoadingModal("Memuat data...");
+        showLoadingModal("Memuat data");
         try {
           const candidatesUrl = `${SCRIPT_URL}?action=getCandidates`;
           const slogansUrl = `${SCRIPT_URL}?action=getSlogans`;
@@ -458,7 +462,7 @@
         if (sloganIntervalId) clearInterval(sloganIntervalId);
         const sloganElement = document.getElementById("sloganDisplay");
         if (slogans.length === 0) {
-          sloganElement.textContent = "Sedang memuat slogan...";
+          sloganElement.textContent = "Sedang memuat slogan";
           return;
         }
         sloganElement.textContent = slogans[0];
