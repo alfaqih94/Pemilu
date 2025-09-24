@@ -2,7 +2,10 @@
 <html lang="id">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
     <title>Pemilihan Ketua OSIS</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
@@ -343,7 +346,8 @@
 
             if (loggedInUser.isAdmin) {
               lastLoginType = "admin";
-              updateAdminData();
+              await updateAdminData();
+              showPage("adminDashboard");
             } else {
               lastLoginType = "user";
               showLoginConfirmationModal(loggedInUser);
@@ -413,8 +417,9 @@
       }
 
       async function updateAdminData() {
-        showLoadingModal("Memperbarui data...");
+        showLoadingModal("Memuat Data Server");
         try {
+          await fetchSlogans();
           const votesUrl = `${SCRIPT_URL}?action=getVotes`;
           const votesResponse = await fetch(votesUrl);
           const votesData = (await votesResponse.json()).data || [];
@@ -462,6 +467,17 @@
         } finally {
           hideLoadingModal();
           startSloganRotation();
+        }
+      }
+      async function fetchSlogans() {
+        try {
+          const slogansUrl = `${SCRIPT_URL}?action=getSlogans`;
+          const response = await fetch(slogansUrl);
+          const result = await response.json();
+          slogans = result.data || [];
+          startSloganRotation(); // Memulai rotasi setelah data baru dimuat
+        } catch (error) {
+          console.error("Error fetching slogans:", error);
         }
       }
 
